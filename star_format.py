@@ -13,7 +13,7 @@ import pandas as pd
 
 def parse_final_out(file_path):
     """
-    Parses the .final.out file and extracts the relevant information.
+    Parses the .final.out file and extracts the relevant information from stat align result.
     """
     with open(file_path, 'r') as f:
         lines = f.readlines()
