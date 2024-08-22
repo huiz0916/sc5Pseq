@@ -5,8 +5,7 @@
 Author: Hui Zhou
 Version: 1.0
 Date: 2024-08-21
-Description: This script calculates and plots base frequencies in a FASTQ file.
-             It also supports plotting from an existing frequency table.
+Description: This script calculates and plots base frequencies in a FASTQ file. It can also specify base positions of interest. It also supports plotting from an existing frequency table.
 Usage:
     - To analyze a FASTQ file and generate frequency plots:
         python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png
@@ -139,7 +138,7 @@ if __name__ == "__main__":
     parser.add_argument('-n', '--num_bases', type=int, default=85, help='Number of bases to analyze (default: 85).')
     parser.add_argument('-t', '--output_table', type=str, required=False, help='Output table file path.')
     parser.add_argument('-p', '--output_plot', type=str, required=True, help='Output plot file path.')
-    parser.add_argument('-s', '--specific_positions', type=int, nargs='+', help='Specific base positions to analyze (e.g., -s 10 15)')
+    parser.add_argument('-s', '--specific_positions', type=int, nargs='+', metavar='POS', help='Specific base positions to analyze (e.g., -s 10 15)')
     parser.add_argument('-sp','--specific_plot_name', type=str, help='Custom name for the specific positions plot output.')
     parser.add_argument('-a','--table_input', type=str, help='Path to an existing base frequencies table to use as input instead of a FASTQ file.')
 
