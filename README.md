@@ -1,2 +1,2 @@
 # sc5Pseq
-useful script for sc5Pseq project
+useful script for sc5Pseq project.
