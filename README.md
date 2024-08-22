@@ -4,11 +4,11 @@
 Some useful scripts for sc5Pseq project.
 
 ### 1. `stat_base_content.py`
-Description:
+Description:  
 This script calculates and plots base frequencies in a FASTQ file. It can also specify base positions of interest
 
 **Usage:**
-```bash
+```
 stat_base_content.py [-h] [-i INPUT_FILE] [-n NUM_BASES]
                             [-t OUTPUT_TABLE] -p OUTPUT_PLOT
                             [-s POS [POS ...]] [-sp SPECIFIC_PLOT_NAME]
@@ -18,7 +18,7 @@ Calculate and plot base frequencies in a FASTQ file or from an existing
 frequency table.
 
 optional arguments:
-  -h, --help            show this help message and exit
+  -h, --help   show this help message and exit
   -i INPUT_FILE, --input_file INPUT_FILE
                         Path to the FASTQ file, support .gz
   -n NUM_BASES, --num_bases NUM_BASES
@@ -35,16 +35,23 @@ optional arguments:
                         Path to an existing base frequencies table to use as
                         input instead of a FASTQ file.
 ```
-**example**
-    - To analyze a FASTQ file and generate frequency plots:
-        python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png
-    - Specify bases at specific positions simultaneously, for example, from 8 to 16:
-        python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png -s 8 16 -sp 8_16_base.png
-    - To generate plots directly from an existing frequency table:
+**Example**  
+```
+    - To analyze a FASTQ file and generate frequency plots:  
+    
+        python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png  
+        
+    - Specify bases at specific positions simultaneously, for example, from 8 to 16:  
+    
+        python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png -s 8 16 -sp 8_16_base.png  
+        
+    - To generate plots directly from an existing frequency table:  
+    
         python script.py --table_input existing_frequencies.csv -p plot.png -s 10 15 -sp custom_name.png
+```
 
 ### 2.  `star_format.py`
-Description:
+Description:  
 Parses the .final.out file and extracts the relevant information from the STAR alignment result.
 
 **Usage:**
