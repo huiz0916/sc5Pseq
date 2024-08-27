@@ -37,7 +37,7 @@ optional arguments:
 ```
 **Example**  
 ```
-    - To analyze a FASTQ file and generate frequency plots:  
+    - To analyze a FASTQ file and generate frequency table and plot:  
     
         python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png  
         
@@ -47,7 +47,7 @@ optional arguments:
         
     - To generate plots directly from an existing frequency table:  
     
-        python script.py --table_input existing_frequencies.csv -p plot.png -s 10 15 -sp custom_name.png
+        python script.py -a output_table.csv -p plot.png -s 10 15 -sp custom_name.png
 ```
 
 ### 2.  `star_format.py`
