@@ -56,8 +56,9 @@ options:
 ```
 
 ### 2.  `star_format.py`
-Description:  
-Parses the .final.out file and extracts the relevant information from the STAR alignment result.
+**Description**  
+
+Parses the .final.out file and extracts the relevant information from the STAR alignment result.  
 
 **Usage:**
 ```bash
