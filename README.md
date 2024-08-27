@@ -3,8 +3,10 @@
 ## Script
 Some useful scripts for sc5Pseq project.
 
-### 1. `stat_base_content.py`
-Description:  
+### 1. `stat_base_content.py`  
+
+**Description**  
+
 This script calculates and plots base frequencies from a FASTQ file. It can generate an interactive HTML plot. It can also specify base positions of interest.
 
 **Requirements**  
