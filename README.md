@@ -5,49 +5,51 @@ Some useful scripts for sc5Pseq project.
 
 ### 1. `stat_base_content.py`
 Description:  
-This script calculates and plots base frequencies in a FASTQ file. It can also specify base positions of interest
+This script calculates and plots base frequencies from a FASTQ file. It can generate an interactive HTML plot. It can also specify base positions of interest.
+
+**Requirements**
+It could run in python2+ and python3+ enviroment, but need some libraries.  
+
+```bash
+pip3 install pandas matplotlib plotly Bio argparse gzip os
+```
 
 **Usage:**
 ```
-stat_base_content.py [-h] [-i INPUT_FILE] [-n NUM_BASES]
-                            [-t OUTPUT_TABLE] -p OUTPUT_PLOT
-                            [-s POS [POS ...]] [-sp SPECIFIC_PLOT_NAME]
-                            [-a TABLE_INPUT]
+usage: stat_base_content.py [-h] [-i INPUT_FILE] [-a TABLE_INPUT] -o OUTPUT_PREFIX
+                            [-n NUM_BASES] [-s POS [POS ...]]
+                            [-sp SPECIFIC_OUTPUT_PREFIX] [--interactive]
+                            [--add_percentage]
 
-Calculate and plot base frequencies in a FASTQ file or from an existing
-frequency table.
+Calculate and plot base frequencies in a FASTQ file or from an existing CSV table.
 
-optional arguments:
-  -h, --help   show this help message and exit
+options:
+  -h, --help            show this help message and exit
   -i INPUT_FILE, --input_file INPUT_FILE
                         Path to the FASTQ file, support .gz
+  -a TABLE_INPUT, --table_input TABLE_INPUT
+                        Path to an existing base frequencies table to use as input
+                        instead of a FASTQ file.
+  -o OUTPUT_PREFIX, --output_prefix OUTPUT_PREFIX
+                        Output file name prefix.
   -n NUM_BASES, --num_bases NUM_BASES
                         Number of bases to analyze (default: 85).
-  -t OUTPUT_TABLE, --output_table OUTPUT_TABLE
-                        Output table file path.
-  -p OUTPUT_PLOT, --output_plot OUTPUT_PLOT
-                        Output plot file path.
   -s POS [POS ...], --specific_positions POS [POS ...]
-                        Specific base positions to analyze (e.g., -s 10 15)
-  -sp SPECIFIC_PLOT_NAME, --specific_plot_name SPECIFIC_PLOT_NAME
-                        Custom name for the specific positions plot output.
-  -a TABLE_INPUT, --table_input TABLE_INPUT
-                        Path to an existing base frequencies table to use as
-                        input instead of a FASTQ file.
+                        Specific base positions or range to analyze (e.g., -s 10 15)
+  -sp SPECIFIC_OUTPUT_PREFIX, --specific_output_prefix SPECIFIC_OUTPUT_PREFIX
+                        Output file name prefix for specific positions plot.
+  --interactive         Generate an interactive HTML plot.
+  --add_percentage      Add percentage labels to the static image.
 ```
 **Example**  
 ```
-    - To analyze a FASTQ file and generate frequency table and plot:  
-    
-        python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png  
-        
-    - Specify bases at specific positions simultaneously, for example, from 8 to 16:  
-    
-        python script.py -i example.fastq -n 85 -t output_table.csv -p plot.png -s 8 16 -sp 8_16_base.png  
-        
-    - To generate plots directly from an existing frequency table:  
-    
-        python script.py -a output_table.csv -p plot.png -s 10 15 -sp custom_name.png
+    module load python #(python/3.12.1)  
+    - To analyze a FASTQ file and generate output files:  
+        python script.py -i example.fastq -o output_prefix  
+    - Specify bases at specific positions, generate dynamic interactive HTML, and add base percentage to PNG:  
+        python script.py -i example.fastq -o output_prefix -s 8 16 --interactive --add_percentage -sp special_output_prefix  
+    - Generate plots directly from an existing CSV table:  
+        python script.py --table_input existing_frequencies.csv -o output_prefix --interactive  
 ```
 
 ### 2.  `star_format.py`
