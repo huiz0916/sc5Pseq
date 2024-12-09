@@ -64,3 +64,47 @@ Parses the .final.out file and extracts the relevant information from the STAR a
 ```bash
 python star_format.py DirectoryPath OutputName
 ```
+
+### 3. `star_plot.py`
+
+**Description**
+
+Easily plot the format mapping stat results from STAR. It can generate bar plot and interactive html to easy compare the mulit samples. You could also specify the features you intersets to plot. 
+
+The **input** are the format file from star_format.py
+
+**Usage**
+```bash
+usage: star_plot.py [-h] -i INPUT [-f FEATURES [FEATURES ...]]
+                    [-c {blue,orange,green,red,purple}] -o OUTPUT
+                    [--interactive] [--sort-samples]
+
+Plot features from formatted STAR log data.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        Input CSV file containing formatted STAR
+                        log data.
+  -f FEATURES [FEATURES ...], --features FEATURES [FEATURES ...]
+                        List of features to compare (default is
+                        'umr_pct'). Available features: input,
+                        umr_num, umr_pct, mismatch_rate, avg_len,
+                        multi_num, multi_pct, unmapped_short_num,
+                        unmapped_short_pct.
+  -c {blue,orange,green,red,purple}, --color {blue,orange,green,red,purple}
+                        Specify the color for the plots (default is
+                        'blue'). Available colors: blue, orange,
+                        green, red, purple.
+  -o OUTPUT, --output OUTPUT
+                        Output file name prefix for the plots.
+  --interactive         Generate interactive plots using Plotly.
+  --sort-samples        Sort sample names in alphanumeric order.
+```
+
+**Example**
+'''
+    module load python #python3.12.7
+    - plot umr_pct and umr_num feature with sort sample name and in red color.
+    python star_plot.py -i final.out.all -f  "umr_pct" "umr_num" -o cdiff --interactive --sort-samples -c red
+'''
