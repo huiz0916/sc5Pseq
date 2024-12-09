@@ -69,7 +69,7 @@ python star_format.py DirectoryPath OutputName
 
 **Description**
 
-Easily plot the format mapping stat results from STAR. It can generate bar plot and interactive html to easy compare the mulit samples. You could also specify the features you intersets to plot. 
+Easily plot the format mapping stat results from STAR. It can generate bar plot and interactive html to easy compare the mulit samples. You could also specify the features you interest to plot. 
 
 The **input** are the format file from star_format.py
 
