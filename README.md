@@ -103,8 +103,8 @@ options:
 ```
 
 **Example**
-'''
+```
     module load python #python3.12.7
     - plot umr_pct and umr_num feature with sort sample name and in red color.
     python star_plot.py -i final.out.all -f  "umr_pct" "umr_num" -o cdiff --interactive --sort-samples -c red
-'''
+```
