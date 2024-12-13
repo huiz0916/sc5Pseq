@@ -115,7 +115,7 @@ options:
 
 This tools could analysis and filter the barcode you have. It allows you control the hamming distance, GC content and exclude any sequence based on the window sliding.  It will generate the hamming distance matrix and filter information. It also visualizes the hamming distance matrix. 
  
-The input including the barcode file (fasta) and excluded fasta. 
+The **input** including the barcode file (fasta) and excluded fasta. 
 
 **Usage**
 ```bash
