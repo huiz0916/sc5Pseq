@@ -108,3 +108,48 @@ options:
     - plot umr_pct and umr_num feature with sort sample name and in red color.
     python star_plot.py -i final.out.all -f  "umr_pct" "umr_num" -o cdiff --interactive --sort-samples -c red
 ```
+
+### 4. `barcode_filter.py`
+
+**Description**
+
+This tools could analysis and filter the barcode you have. It allows you control the hamming distance, GC content and exclude any sequence based on the window sliding.  It will generate the hamming distance matrix and filter information. It also visualizes the hamming distance matrix. 
+ 
+The input including the barcode file (fasta) and excluded fasta. 
+
+**Usage**
+```bash
+usage: barcode_filter.py [-h] -i INPUT [-e EXCLUDE] [-ht HAMMING] [-gmin GC_MIN] [-gmax GC_MAX] -of
+                         OUTPUT_FILTERED -oi OUTPUT_INFO -hmf HAMMING_MATRIX_FILE -hpf HAMMING_PLOT_FILE
+                         [-d]
+
+Filter barcode sequences based on Hamming distance, GC content, and exclusions.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        Input fasta file containing barcodes.
+  -e EXCLUDE, --exclude EXCLUDE
+                        Fasta file containing sequences to exclude.
+  -ht HAMMING, --hamming HAMMING
+                        Minimum Hamming distance threshold (default: 3).
+  -gmin GC_MIN, --gc_min GC_MIN
+                        Minimum GC content percentage (default: 40.0).
+  -gmax GC_MAX, --gc_max GC_MAX
+                        Maximum GC content percentage (default: 60.0).
+  -of OUTPUT_FILTERED, --output_filtered OUTPUT_FILTERED
+                        Output fasta file for filtered barcodes.
+  -oi OUTPUT_INFO, --output_info OUTPUT_INFO
+                        Output text file for detailed filtering information.
+  -hmf HAMMING_MATRIX_FILE, --hamming_matrix_file HAMMING_MATRIX_FILE
+                        Output text file for Hamming distance matrix.
+  -hpf HAMMING_PLOT_FILE, --hamming_plot_file HAMMING_PLOT_FILE
+                        Output image file for Hamming distance heatmap.
+  -d, --debug           Enable debug logging.
+
+```
+
+**Example**
+```bash
+barcode_filter.py -i barcode.fa -e exclude_file.fa -of barcode.filter.fa -oi barcode.filterinfo.txt -hmf barcode.filter.matrix.txt -hpf barcode.filter.matrix.plot
+```
