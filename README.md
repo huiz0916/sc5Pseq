@@ -210,9 +210,9 @@ Input BAM should be pre-trimmed to remove TSO/barcode/primer, mapping only the R
 
 ```bash
 module load python/3.12.3 # if working on PDC
-python3 detect_remove_artifactTSO_v0.2.py -h
+python3 detect_remove_artifactTSO.py -h
 
-usage: detect_remove_artifactTSO_v0.2.py [-h] {stat,plot,strand_invasion,missing_pairing} ...
+usage: detect_remove_artifactTSO.py [-h] {stat,plot,strand_invasion,missing_pairing} ...
 
 A pipeline for strand invasion/missing pairing artifact analysis: stat, plot, filter.
 
@@ -248,7 +248,7 @@ pip install pysam pyfaidx pandas matplotlib logomaker
 
 1. Stat: Generate all statistics and tables
 ```bash
-python detect_remove_artifactTSO_v0.2.py stat \
+python detect_remove_artifactTSO.py stat \
   -b input.bam -f genome.fa -t TTTCTTATATGGG \
   --g_out stat_g.tsv --c_out stat_c.tsv --logo_table logo_table.tsv \
   --g_curve_out g_curve.tsv --c_curve_out c_curve.tsv
@@ -257,7 +257,7 @@ python detect_remove_artifactTSO_v0.2.py stat \
 2. Plot: Visualize heatmap, sequence logo, or grouped line plot
 
 ```bash
-python detect_remove_artifactTSO_v0.2.py plot \
+python detect_remove_artifactTSO.py plot \
   --g_out stat_g.tsv --c_out stat_c.tsv --logo_table logo_table.tsv \
   --g_curve g_curve.tsv --logo_mode G --curve_png gcurve.png --logo_png logo.png
 ```
@@ -265,7 +265,7 @@ python detect_remove_artifactTSO_v0.2.py plot \
 3. Filter: Remove artifact reads from BAM
 
 ```bash
-python detect_remove_artifactTSO_v0.2.py strand_invasion \
+python detect_remove_artifactTSO.py strand_invasion \
   -b input.bam -f genome.fa -t TTTCTTATATGGG \
   --min_g 2 --max_hamming 3 --outbam filtered.bam
 ```
