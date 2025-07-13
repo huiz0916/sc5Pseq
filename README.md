@@ -203,7 +203,7 @@ This command will:
 - Append an extra column (here, `version1.0`) after the sample column.
 - Write the output summary to `umi_summary.txt`.
 
-### 6. `detect_remove_artifactTSO_v0.2.py`
+### 6. `detect_remove_artifactTSO.py`
 
 This toolset identifies, visualizes, and filters TSO-related artifacts in 5' end-mapping RNA-seq data.
 Input BAM should be pre-trimmed to remove TSO/barcode/primer, mapping only the RNA/cDNA true 5' ends. Without pre-trimmed are developing.
