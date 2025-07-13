@@ -153,3 +153,119 @@ options:
 ```bash
 barcode_filter.py -i barcode.fa -e exclude_file.fa -of barcode.filter.fa -oi barcode.filterinfo.txt -hmf barcode.filter.matrix.txt -hpf barcode.filter.matrix.plot
 ```
+
+### 5. `parse_umi_log.py`
+
+**Description**
+
+This script parses umi-tools log files and extracts statistics for R1 only. It extracts the following from each log file:
+- **Input Reads** (only R1; lines mentioning read2 are skipped)
+- **regex matches read1**
+- **regex does not match read1**
+
+The sample name is derived from the file name by taking the part before the first underscore (e.g., for `A1_S188.umi.extract.log`, the sample is `A1`). If multiple log files belong to the same sample, their statistics are merged. Additionally, an optional parameter (`-a`) allows you to append an extra column (for example, to indicate a version or any other field) immediately after the sample column in the output.
+
+**Requirements**
+
+This script requires Python 3 and uses only standard libraries:
+- `argparse`
+- `re`
+- `os`
+
+No additional packages are needed.
+
+**Usage**
+
+```bash
+usage: parse_umi_log.py -i INPUT [INPUT ...] [-o OUTPUT] [-a APPEND]
+
+Parse umi-tools log files and output merged summary for R1 only.
+
+options:
+  -i INPUT [INPUT ...], --input INPUT [INPUT ...]
+                        List of .log files to process.
+  -o OUTPUT, --output OUTPUT
+                        Output file name (default: merged_summary.txt).
+  -a APPEND, --append APPEND
+                        Additional field to append after sample (e.g. version).
+```
+
+**Example**
+
+```bash
+python parse_umi_log.py -i A1_S188.umi.extract.log B2_S189.umi.extract.log -o umi_summary.txt -a version1.0
+```
+
+This command will:
+- Process the log files `A1_S188.umi.extract.log` and `B2_S189.umi.extract.log`.
+- Parse only the R1 statistics from each file.
+- Merge statistics for samples with the same sample name.
+- Append an extra column (here, `version1.0`) after the sample column.
+- Write the output summary to `umi_summary.txt`.
+
+### 6. `detect_remove_artifactTSO_v0.2.py`
+
+This toolset identifies, visualizes, and filters TSO-related artifacts in 5' end-mapping RNA-seq data.
+Input BAM should be pre-trimmed to remove TSO/barcode/primer, mapping only the RNA/cDNA true 5' ends. Without pre-trimmed are developing.
+
+```bash
+module load python/3.12.3 # if working on PDC
+python3 detect_remove_artifactTSO_v0.2.py -h
+
+usage: detect_remove_artifactTSO_v0.2.py [-h] {stat,plot,strand_invasion,missing_pairing} ...
+
+A pipeline for strand invasion/missing pairing artifact analysis: stat, plot, filter.
+
+positional arguments:
+  {stat,plot,strand_invasion,missing_pairing}
+    stat                Stat mode: outputs TSV for TSO-hamming+G, rcTSO-hamming+C, logo table, and grouped percentage curves.
+    plot                Plot mode: visualize heatmaps/logo/curve from stat .tsv
+    strand_invasion     Filter by G in last 3 nt + TSO hamming
+    missing_pairing     Filter by C in last 3 nt + rcTSO hamming
+
+options:
+  -h, --help            show this help message and exit
+```
+
+**Features:**
+- `stat`: Output statistics (TSO/rcTSO hamming distance vs. last 3nt G/C count) and sequence logo table.
+- `plot`: Flexible visualization (heatmaps, sequence logos, grouped line plots) from stat output.
+- `filtering`: Filter BAM files by user-specified thresholds.
+
+*TSO sequence can include IUPAC ambiguity codes. Hamming distance is computed only on the TSO core (excluding the trailing GGG/CCC).*
+
+---
+
+**Installation**
+
+Python 3.7+ is required. Install dependencies with:
+
+```bash
+pip install pysam pyfaidx pandas matplotlib logomaker
+```
+
+**usage**
+
+1. Stat: Generate all statistics and tables
+```bash
+python detect_remove_artifactTSO_v0.2.py stat \
+  -b input.bam -f genome.fa -t TTTCTTATATGGG \
+  --g_out stat_g.tsv --c_out stat_c.tsv --logo_table logo_table.tsv \
+  --g_curve_out g_curve.tsv --c_curve_out c_curve.tsv
+```
+
+2. Plot: Visualize heatmap, sequence logo, or grouped line plot
+
+```bash
+python detect_remove_artifactTSO_v0.2.py plot \
+  --g_out stat_g.tsv --c_out stat_c.tsv --logo_table logo_table.tsv \
+  --g_curve g_curve.tsv --logo_mode G --curve_png gcurve.png --logo_png logo.png
+```
+
+3. Filter: Remove artifact reads from BAM
+
+```bash
+python detect_remove_artifactTSO_v0.2.py strand_invasion \
+  -b input.bam -f genome.fa -t TTTCTTATATGGG \
+  --min_g 2 --max_hamming 3 --outbam filtered.bam
+```
