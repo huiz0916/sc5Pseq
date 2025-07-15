@@ -148,7 +148,7 @@ def stat_mode(bam_path, fasta_path, tso_seq, g_out, c_out, logo_table, g_curve_o
         print(f"C curve saved: {c_curve_out}")
 
 def plot_mode(g_out, c_out, logo_table, logo_mode='G', logo_png=None, heatmap_png=None,
-              hamming_max=None, min_g=2, min_c=2, y_mode='rel',
+              hamming_max=None, min_g=0, min_c=0, y_mode='rel',
               g_curve=None, c_curve=None, curve_png=None):
     """
     Visualize stats (heatmap, sequence logo, and percentage curve plots).
@@ -189,15 +189,18 @@ def plot_mode(g_out, c_out, logo_table, logo_mode='G', logo_png=None, heatmap_pn
     if logo_mode and logo_png:
         df = pd.read_csv(logo_table, sep='\t')
         if logo_mode == 'G':
+            df['G_count'] = pd.to_numeric(df['G_count'], errors='coerce')
             sel = (df['G_count'] >= min_g)
             if hamming_max is not None:
                 sel &= (df['hamming_TSO'] <= hamming_max)
             seqs = df[sel]['seq'].tolist()
+            print(f"hamming_max: {hamming_max}, min_g: {min_g}")
         elif logo_mode == 'C':
             sel = (df['C_count'] >= min_c)
             if hamming_max is not None:
                 sel &= (df['hamming_rcTSO'] <= hamming_max)
             seqs = df[sel]['seq'].tolist()
+            print(f"hamming_max: {hamming_max}, min_g: {min_c}")
         else:
             seqs = df['seq'].tolist()
         if not seqs:
@@ -206,13 +209,29 @@ def plot_mode(g_out, c_out, logo_table, logo_mode='G', logo_png=None, heatmap_pn
         counts_matrix = logomaker.alignment_to_matrix(seqs)
         if y_mode == 'rel':
             counts_matrix = counts_matrix.div(counts_matrix.sum(axis=1), axis=0)
+        elif y_mode == 'bits':
+            # logomaker handles pseudocounts and info content, but must use counts
+            # Fill NA with 0 (rare edge case)
+            counts_matrix = counts_matrix.fillna(0)
+            info_matrix = logomaker.transform_matrix(counts_matrix, from_type='counts', to_type='information')
+            counts_matrix = info_matrix
+        # No transform for y_mode == 'count'
         plt.figure(figsize=(min(15, len(seqs[0])//1.2), 3))
         logomaker.Logo(counts_matrix)
-        plt.title(f"Sequence logo (mode {logo_mode}, n={len(seqs)})")
+        plt.title(f"Sequence logo (mode {logo_mode}, n={len(seqs)}, y={y_mode})")
         plt.tight_layout()
-        plt.ylim(0, counts_matrix.max().max()*1.05)
-        plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0] if y_mode=='rel' else None)
+        if y_mode == 'rel':
+            plt.ylim(0, 1.05)
+            plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+            plt.ylabel('Relative Frequency')
+        elif y_mode == 'count':
+            plt.ylabel('Count')
+        elif y_mode == 'bits':
+            plt.ylim(0, 2.1)  # Max bits per base for DNA=2
+            plt.ylabel('Bits')
         plt.savefig(logo_png)
+        print(f"Total reads in logo_table: {len(df)}")
+        print(f"Reads used for logo (after filter): {len(seqs)}")
         print(f"Logo saved: {logo_png}")
     # Percentage curve plot
     if g_curve and logo_mode == 'G':
@@ -318,9 +337,10 @@ def main():
     p_plot.add_argument('--logo_png', help='Output path for logo PNG')
     p_plot.add_argument('--heatmap_png', help='Prefix for saving heatmaps (will append _g/_c)')
     p_plot.add_argument('--hamming_max', type=int, default=None, help='Filter: max hamming distance for logo')
-    p_plot.add_argument('--min_g', type=int, default=2, help='Filter: min G for logo (if G mode)')
-    p_plot.add_argument('--min_c', type=int, default=2, help='Filter: min C for logo (if C mode)')
-    p_plot.add_argument('--y_mode', choices=['rel', 'count'], default='rel', help='Logo Y axis: rel=relative freq, count=absolute count')
+    p_plot.add_argument('--min_g', type=int, default=0, help='Filter: min G for logo (if G mode)')
+    p_plot.add_argument('--min_c', type=int, default=0, help='Filter: min C for logo (if C mode)')
+    p_plot.add_argument('--y_mode', choices=['rel', 'count', 'bits'], default='rel',
+    help='Logo Y axis: rel=relative freq, count=absolute count, bits=information content')
     p_plot.add_argument('--g_curve', default=None, help='Grouped percent curve table for G mode')
     p_plot.add_argument('--c_curve', default=None, help='Grouped percent curve table for C mode')
     p_plot.add_argument('--curve_png', default=None, help='Output PNG for curve plot')
