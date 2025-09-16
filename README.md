@@ -291,7 +291,8 @@ CSV (long-format):
   - global  : reads,reads_M,mean_unique,std_unique,dedup
   - per-cell: cell,reads,reads_M,expected_unique,dedup
 
-****Requirements****
+**Requirements**
+
 If working on PDC: ml bioinfo-tools; ml python/3.12.3
 
 **usage**
