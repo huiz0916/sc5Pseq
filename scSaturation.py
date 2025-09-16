@@ -6,7 +6,7 @@
 """
 scSaturation.py #version 0.0.1
 
-Single-cell sequencing saturation curves for general bam file with libray and per cell support.
+Single-cell sequencing saturation curves for a general bam file with library and per-cell support.
 
 Modes (mutually exclusive via --mode):
   - global   : Monte Carlo subsampling of the whole BAM and counting uniques
