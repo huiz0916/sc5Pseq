@@ -439,7 +439,7 @@ def main():
             raise SystemExit("No per-cell curves to draw (no usable items). "
                              "Consider --keep-missing-gene or lowering thresholds.")
 
-        out_png = f"{args.out_prefix}_per_cell_{args.per_cell_dedup}.png"
+        out_png = f"{args.out_prefix}_PerCell_{args.per_cell_dedup}.png"
         ylabel_auto = ylabel_default_for("per-cell", args.per_cell_dedup)
         title = args.title or (f"Per-cell Saturation Curves (expected, {args.per_cell_dedup})\n"
                                f"{len(curves)} cells; min_reads≥{args.per_cell_min_reads}; "
@@ -451,7 +451,7 @@ def main():
         print(f"[Per-cell] Figure: {out_png}")
 
         if args.csv:
-            out_csv = f"{args.out_prefix}_per_cell_{args.per_cell_dedup}.csv"
+            out_csv = f"{args.out_prefix}_PerCell_{args.per_cell_dedup}.csv"
             with open(out_csv, "w") as f:
                 f.write("cell,reads,reads_M,expected_unique,dedup\n")
                 for cb, (xs, ys) in curves.items():
@@ -494,7 +494,7 @@ def main():
         note = "(per-cell-per-gene dedup)"
 
     ylabel_auto = ylabel_default_for("global", args.dedup)
-    out_png = f"{args.out_prefix}_global_{args.dedup}.png"
+    out_png = f"{args.out_prefix}_Global_{args.dedup}.png"
     title = args.title or f"Sequencing Saturation: Reads vs {legend}\nN={total_reads:,} reads {note}"
     plot_global(results, out_png, title,
                 xlabel=default_xlabel,
@@ -504,7 +504,7 @@ def main():
                 show_band=not args.no_band)
 
     if args.csv:
-        out_csv = f"{args.out_prefix}_global_{args.dedup}.csv"
+        out_csv = f"{args.out_prefix}_Global_{args.dedup}.csv"
         with open(out_csv, "w") as f:
             f.write("reads,reads_M,mean_unique,std_unique,dedup\n")
             for n, m, s in results:
