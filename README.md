@@ -1,7 +1,7 @@
 # sc5Pseq
 
 ## Script
-Some useful scripts for sc5Pseq project.
+Some useful scripts for sc5Pseq project. **Not everyone is well tested.** 😀
 
 ### 1. `stat_base_content.py`  
 
@@ -268,4 +268,60 @@ python detect_remove_artifactTSO.py plot \
 python detect_remove_artifactTSO.py strand_invasion \
   -b input.bam -f genome.fa -t TTTCTTATATGGG \
   --min_g 2 --max_hamming 3 --outbam filtered.bam
+```
+
+### `scSaturation.py`
+
+**Single-cell sequencing saturation curves for a general bam file with library and per-cell support.**
+
+Modes (mutually exclusive via --mode):
+  - global: Monte Carlo subsampling of the whole BAM and counting uniques
+               --dedup cell       -> unique (CB, UMI)
+               --dedup library    -> unique UMI (ignore CB & Gene)
+               --dedup cell-gene  -> unique (CB, Gene, UMI)
+  - per-cell: For each selected CB, compute EXPECTED unique molecules vs reads
+               analytically (no Monte Carlo)
+               --per-cell-dedup {cell, cell-gene}
+
+Plot Axes:
+  - X axis is always "Number of reads (M)"; you can override both axes via --xlabel/--ylabel
+  - Journal style (no grid). Optional --logx, and --no-band (global only)
+
+CSV (long-format):
+  - global  : reads,reads_M,mean_unique,std_unique,dedup
+  - per-cell: cell,reads,reads_M,expected_unique,dedup
+
+****Requirements****
+If working on PDC: ml bioinfo-tools; ml python/3.12.3
+
+**usage**
+
+1. Global, per-cell dedup, 25 points, CSV
+```bash
+python scSaturation.py --mode global --bam in.bam --out-prefix sample \
+  --dedup cell --num-points 25 --skip-secondary --csv
+```
+
+2. Global, library-level unique UMI (ignore CB/Gene), log-x, no band
+```bash
+python scSaturation.py --mode global --bam in.bam --out-prefix sample_lib \
+  --dedup library --logx --no-band
+```
+
+3. Global, cell-gene dedup using GX then GN
+```bash
+python scSaturation.py --mode global --bam in.bam --out-prefix sample_cg \
+  --dedup cell-gene --gene-tags GX,GN
+```
+
+4. Per-cell curves, per-cell dedup, top100 cells (>=2k reads), CSV
+```bash
+python scSaturation.py --mode per-cell --bam in.bam --out-prefix sample_cells \
+  --per-cell-dedup cell --per-cell-max 100 --per-cell-min-reads 2000 --csv
+```
+
+5. Per-cell curves, cell-gene dedup for a custom CB list
+```bash
+python scSaturation.py --mode per-cell --bam in.bam --out-prefix sample_cells_cg \
+  --per-cell-dedup cell-gene --cb-list cells.txt
 ```
