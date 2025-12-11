@@ -9,7 +9,7 @@ Date: 2025-10-28
 
 Purpose
 -------
-Unified pipeline to score, visualize and filter 5' and 3' end artefacts
+Pipeline to score, visualize and filter 5' and 3' end artefacts
 in RNA-seq libraries.
 
 Top-level workflow
