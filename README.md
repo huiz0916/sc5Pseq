@@ -363,16 +363,15 @@ python3 libend_artifact_filter.py --mode 3p score \
   --prefix CCE78_SCFlu25r1t2_3P_dedup
 
 python3 libend_artifact_filter.py --mode 3p plot \
+  --prefix CCE78_SCFlu25r1t2_3P_dedup
+
+python3 libend_artifact_filter.py --mode 3p plot \
   --prefix CCE78_SCFlu25r1t2_3P_dedup \
   --make-logo bits \
   --logo-score1-max 2 \
   --logo-score2-max 7
-
+  
 # Filter reads based on 3' artifact scores and logo plots
-python3 libend_artifact_filter.py --mode 3p plot \
-
-  --prefix CCE78_SCFlu25r1t2_3P_dedup
-
 python3 libend_artifact_filter.py --mode 3p filter \
     -b CCE78_SCFlu25r1t2_3P_dedup.bam \
     -f /cfs/klemming/projects/supr/sllstore2017018/ref_share/fungi/SaCer_embl_74/Saccharomyces_cerevisiae.EF4.74.dna.toplevel.fa \
