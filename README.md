@@ -326,3 +326,58 @@ python scSaturation.py --mode per-cell --bam in.bam --out-prefix sample_cells \
 python scSaturation.py --mode per-cell --bam in.bam --out-prefix sample_cells_cg \
   --per-cell-dedup cell-gene --cb-list cells.txt
 ```
+
+### `libend_artifact_filter.py`
+
+**Pipeline to score, visualize and filter 5' and 3' end artefacts
+in RNA-seq libraries**
+
+**Usage**
+
+```bash
+usage: libend_artifact_filter.py [-h] --mode {5p,3p} [--log-level {DEBUG,INFO,WARNING,ERROR}] {score,plot,filter} ...
+
+Unified 5' (TSO) & 3' (oligo-dT) artefact analysis: score, plot, filter.
+
+positional arguments:
+  {score,plot,filter}
+    score               Compute per-read scores and threshold grids.
+    plot                Plot heatmaps, coverage curves and logos.
+    filter              Filter BAM by artefact rules.
+
+options:
+  -h, --help            show this help message and exit
+  --mode {5p,3p}        Library end mode: 5p (TSO) or 3p (oligo-dT)
+  --log-level {DEBUG,INFO,WARNING,ERROR}
+                        Logging verbosity.
+```
+
+**An example**
+
+```bash
+python3 libend_artifact_filter.py --mode 3p score \
+  -b CCE78_SCFlu25r1t2_3P_dedup.bam \
+  -f /cfs/klemming/projects/supr/sllstore2017018/ref_share/fungi/SaCer_embl_74/Saccharomyces_cerevisiae.EF4.74.dna.toplevel.fa \
+  --oligos /cfs/klemming/home/h/huizhou/software/RNAEdgeFlow_dev/external/oligo_dT.tsv \
+  --min-mapq 255 \
+  --prefix CCE78_SCFlu25r1t2_3P_dedup
+
+python3 libend_artifact_filter.py --mode 3p plot \
+  --prefix CCE78_SCFlu25r1t2_3P_dedup \
+  --make-logo bits \
+  --logo-score1-max 2 \
+  --logo-score2-max 7
+
+# Filter reads based on 3' artifact scores and logo plots
+python3 libend_artifact_filter.py --mode 3p plot \
+
+  --prefix CCE78_SCFlu25r1t2_3P_dedup
+
+python3 libend_artifact_filter.py --mode 3p filter \
+    -b CCE78_SCFlu25r1t2_3P_dedup.bam \
+    -f /cfs/klemming/projects/supr/sllstore2017018/ref_share/fungi/SaCer_embl_74/Saccharomyces_cerevisiae.EF4.74.dna.toplevel.fa \
+    --oligos /cfs/klemming/home/h/huizhou/software/RNAEdgeFlow_dev/external/oligo_dT.tsv \
+    --read-window-len 34 --score1-thresh 2 --score2-thresh 7 
+    -o CCE78_SCFlu25r1t2_3P_filtered.bam
+```
+
